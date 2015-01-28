@@ -20,9 +20,9 @@
 # Where is the file located?
 # Should be something like "/Volumes/<disk label>/<file name> on OS X.
 # or "/media/<disk>/<file>" on GNU/Linux systems
-WATCHFILE="/Volumes/NO NAME/file"
+WATCHFILE="/Volumes/NO NAME/dmsfile"
 
-LOCAL_VERIFY_FILE="~.deadmanswitch"
+LOCAL_VERIFY_FILE="~.dmsfile"
 
 #Software used to determine checksum.
 CHECKSUMSOFT = "shasum"
@@ -34,7 +34,7 @@ CHECKSUM="$($CHECKSUMSOFT "$LOCAL_VERIFY_FILE" | awk '{print $1}')"
 while true; do
     if [ -f "$WATCHFILE" ]; then
     	# obtain checksum from dead mans switch (usb storage)
-    	CHECKSUM_VERIFY = "$($CHECKSUMSOFT "$WATCHFILE" | awk '{print $1}')"
+    	CHECKSUM_VERIFY="$($CHECKSUMSOFT "$WATCHFILE" | awk '{print $1}')"
         #compare checksums and if they match up
         if [ "$CHECKSUM" == "$CHECKSUM_VERIFY" ]; then
             sleep 2
