@@ -7,29 +7,39 @@
 ##########################################################################
 #                       PROOF OF CONCEPT ONLY
 ##########################################################################
-# INSTRUCTIONS:
-#  1. Generate the random file.
+# OVERVIEW:
+#  1. A file is created with random data.
 #     $ cd; dd if=/dev/random of=.deadmansswitch bs=100k count=1
-#  2. Copy the file to the usb device to be used as a dead mans switch
-#     $ cp .deadmansswitch /Volumes/<disk label>/<file name>
+#  2. The generated file is copied to the usb device (dead mans switch)
+#     $ cp .deadmansswitch /Volumes/disk/file
 #  3. Edit the WATCHFILE variable in the script below.
 #  4. Run this script when you need the protection of a Deads Mans Switch.
 ##########################################################################
 
-
-# Where is the file located?
-# Should be something like "/Volumes/<disk label>/<file name> on OS X.
-# or "/media/<disk>/<file>" on GNU/Linux systems
+###### File Locations
+# USB Drive on OSX Example: /Volumes/disk/file
+# GNU/Linux Example: /media/disk/file
 WATCHFILE="/Volumes/NO NAME/dmsfile"
-
-LOCAL_VERIFY_FILE="~.dmsfile"
+LOCAL_VERIFY_FILE=".dmsfile"
 
 #Software used to determine checksum.
 CHECKSUMSOFT = "shasum"
 
+if [ ! -f $LOCAL_VERIFY_FILE ]; then
+    echo "DMS has not been configured!"
+    echo "Generating random data..."
+    cd; dd if=/dev/random of=$LOCAL_VERIFY_FILE bs=100k count=1
+fi
+
+if [ ! -f $WATCHFILE ]; then
+    echo "Copying random data file to external Dead Mans Switch..."
+    cp .dmsfile $WATCHFILE
+fi
+
 # Determine checksum of local verification file on device
 CHECKSUM="$($CHECKSUMSOFT "$LOCAL_VERIFY_FILE" | awk '{print $1}')"
 
+echo "DMS ENABLED"
 
 while true; do
     if [ -f "$WATCHFILE" ]; then
@@ -38,15 +48,10 @@ while true; do
         #compare checksums and if they match up
         if [ "$CHECKSUM" == "$CHECKSUM_VERIFY" ]; then
             sleep 2
-        #if they don't match up    
+        # If the checksums are not equal  
         else
-			# Force Secure delete of entire directory - OS X
-			# Could be slow when deleting large amounts of data. Might be safer to rely on encryption?
-        	#srm -rf /path/to/directory
-            
             # Supend the computer - OS X
             /System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend
-    		
     		# Power off the computer - OS X or GNU/Linux
     		# Shutdown is slower than a suspend. But safer in regards to clearing RAM contents.
     		# To use shutdown, script should be executed by a root user or made suid.
