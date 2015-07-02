@@ -33,7 +33,7 @@ fi
 
 if [ ! -f $WATCHFILE ]; then
     echo "Copying random data file to external Dead Mans Switch..."
-    cp .dmsfile $WATCHFILE
+    cp $LOCAL_VERIFY_FILE $WATCHFILE
 fi
 
 # Determine checksum of local verification file on device
