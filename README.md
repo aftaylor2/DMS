@@ -4,9 +4,8 @@ by Andrew Taylor < ataylor@phr3ak.com ><br />
 Based on idea proposed by Viktor Petersson - http://bit.ly/1CkN4by<br />
 <br />
 <h3>Notes</h3>
-Intended to be used on a system with full disk encryption.<br />
-Currently this project is only a Proof of Concept.<br/ >
-<br />However, I recently found a more complete project: https://github.com/defuse/swatd <br />
+Intended to be used on a system with full disk encryption. Currently this project is only a Proof of Concept.
+However, I recently found a more complete project: https://github.com/defuse/swatd <br />
 
 <br />
 <h3>Description</h3>
